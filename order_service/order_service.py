@@ -6,12 +6,16 @@ from kafka import KafkaProducer
 from pydantic import BaseModel
 import json
 import logging
+from pymongo import MongoClient
 
 app = FastAPI()
 
 # Kafka Configuration
 KAFKA_BROKER_URL = "localhost:9092"
 ORDER_TOPIC = "order_topic"
+client = MongoClient("mongodb+srv://palmohit897:1234567890@cluster0.tbarxzw.mongodb.net/")
+db = client['ecommerce']
+orders_collection = db['orders']
 
 # WebSockets for real-time updates
 clients = []

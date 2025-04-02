@@ -4,6 +4,7 @@ from fastapi.staticfiles import StaticFiles
 import json
 import asyncio
 from aiokafka import AIOKafkaConsumer, AIOKafkaProducer
+from pymongo import MongoClient
 
 app = FastAPI()
 
@@ -12,10 +13,16 @@ KAFKA_BROKER_URL = "localhost:9092"
 ORDER_TOPIC = "order_topic"
 PAYMENT_TOPIC = "payment_topic"
 
+client = MongoClient("mongodb+srv://palmohit897:1234567890@cluster0.tbarxzw.mongodb.net/")
+db = client['ecommerce']
+payments = db['payments']
+
+
 from pydantic import BaseModel
 
 class PaymentRequest(BaseModel):
     order_id: str
+    status:str
 
 # Setup Jinja2 Templates
 templates = Jinja2Templates(directory="templates")
@@ -61,6 +68,7 @@ async def consume_orders():
     finally:
         await consumer.stop()
 
+@app.get("/payment_page")
 @app.get("/payment_page/")
 async def payment_page(request: Request, order_id: str):
     """Serve the payment page for a specific order"""
@@ -74,14 +82,14 @@ async def payment_page(request: Request, order_id: str):
 async def process_payment(payment: PaymentRequest):
     """Process the payment and publish event to Kafka"""
     order_id = payment.order_id
-    order = orders.get(order_id)
-   # order = orders.get(order_id)
-    if not order:
+    status = payment.status
+   
+    if not order_id:
         return {"error": "Order not found"}
 
     # Simulate payment processing
-    order["status"] = "payment_processed"
-    await producer.send(PAYMENT_TOPIC, order)
+  
+    await producer.send(PAYMENT_TOPIC, order_id)
     print(f"Payment processed for order {order_id}")
 
-    return {"message": "Payment processed successfully!", "order": order}
+    return {"message": "Payment processed successfully!", "order": order_id,"status":status}
