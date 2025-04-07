@@ -20,7 +20,7 @@
         document.getElementById("payNow").onclick = async function() {
             let paymentData = { order_id: orderId, status: "payment_processed" };
 
-            let response = await fetch("http://127.0.0.1:8082/process_payment/", {
+            let response = await fetch("http://127.0.0.1:8081/process_payment/", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(paymentData)

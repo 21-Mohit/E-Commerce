@@ -4,6 +4,7 @@
     <title>Order Service</title>
 </head>
 <body>
+    <h1>Welcome, {{ user }}</h1>
     <h1>Place an Order</h1>
     <form id="orderForm">
         <input type="text" id="order_id" placeholder="Order ID" required>
@@ -43,7 +44,7 @@
 
             if (response.ok) {
                 // Redirect to payment page after placing the order
-                window.location.href = `http://127.0.0.1:8082/payment_page/?order_id=${order.order_id}`;
+                window.location.href = `http://127.0.0.1:8081/payment_page/?order_id=${order.order_id}`;
             }
         };
     </script>
