@@ -20,12 +20,11 @@ A scalable, modular, and event-driven backend system for an e-commerce platform,
          |                                       |
          v                                       v
 +------------------+                  +----------------------+
-| Payment Service  | (Future)         | Notification Service |
+| Payment Service  | (payment_topic)         | Notification Service |
 +------------------+                  +----------------------+
                                                |
                                                v
-                                  Sends email/SMS/console notification
-
+                                           (Future)
 
 ---
 
